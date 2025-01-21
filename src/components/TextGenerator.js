@@ -6,9 +6,6 @@ import {
   Send, 
   Copy, 
   Download, 
-  History, 
-  X, 
-  Clock, 
   Loader2,
   CheckCircle 
 } from 'lucide-react';

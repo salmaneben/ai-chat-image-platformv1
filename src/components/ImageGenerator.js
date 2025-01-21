@@ -8,7 +8,6 @@ import {
   Layout,
   Sliders,
   Bot,
-  Image as ImageIcon,
   Download,
   ExternalLink,
   CheckCircle

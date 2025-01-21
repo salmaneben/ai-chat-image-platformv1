@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { login, register } from '../api/authAPI';
 import { auth } from '../config/firebase';
 import { signOut as firebaseSignOut } from 'firebase/auth';
-import { preserveUserStats, restoreUserStats, clearStats } from '../utils/statsTracker';
+import { preserveUserStats, restoreUserStats } from '../utils/statsTracker'; // Removed clearStats
 
 // Configurable session duration (default: 24 hours)
 const SESSION_DURATION = process.env.REACT_APP_SESSION_DURATION || 24 * 60 * 60 * 1000; // 24 hours in milliseconds

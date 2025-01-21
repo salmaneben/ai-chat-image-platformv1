@@ -1,5 +1,3 @@
-// src/App.js
-
 import React, { useEffect, Suspense } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,7 +6,7 @@ import { NotificationProvider } from './components/common/Notification/Notificat
 import { checkAuthStatus, logout, refreshSession } from './redux/userSlice';
 import { notificationManager } from './utils/notificationManager';
 
-// Pages
+// Existing Pages
 import Presentation from './pages/Presentation';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
@@ -18,6 +16,17 @@ import Settings from './pages/Settings';
 import TextGenerator from './components/TextGenerator';
 import ImageGenerator from './components/ImageGenerator';
 import History from './components/History';
+
+// New Pages
+import Product from './pages/Product';
+import Features from './pages/Features';
+import Pricing from './pages/Pricing';
+import Documentation from './pages/Documentation';
+import Company from './pages/Company';
+import About from './pages/About';
+import Blog from './pages/Blog';
+import Support from './pages/Support';
+import Privacy from './pages/Privacy';
 
 // Loading Component
 const LoadingScreen = () => (
@@ -69,8 +78,8 @@ const AuthCheck = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const lastLoginTime = useSelector(state => state.user.lastLoginTime);
-  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+  const lastLoginTime = useSelector((state) => state.user.lastLoginTime);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   useEffect(() => {
     // Initial auth check
@@ -80,11 +89,11 @@ const AuthCheck = () => {
       } catch (error) {
         if (isAuthenticated) {
           notificationManager.error('Session expired', {
-            description: 'Please login again'
+            description: 'Please login again',
           });
-          navigate('/login', { 
+          navigate('/login', {
             replace: true,
-            state: { from: location }
+            state: { from: location },
           });
         }
       }
@@ -105,7 +114,7 @@ const AuthCheck = () => {
         if (lastLoginTime && Date.now() - lastLoginTime > sessionDuration) {
           dispatch(logout());
           notificationManager.warning('Session expired', {
-            description: 'Please login again'
+            description: 'Please login again',
           });
           navigate('/login');
         }
@@ -115,12 +124,12 @@ const AuthCheck = () => {
       const resetActivityTimer = () => {
         clearTimeout(activityTimeout);
         dispatch(refreshSession());
-        
+
         // Set new timeout for inactivity (30 minutes)
         activityTimeout = setTimeout(() => {
           dispatch(logout());
           notificationManager.warning('Session expired due to inactivity', {
-            description: 'Please login again'
+            description: 'Please login again',
           });
           navigate('/login');
         }, 30 * 60 * 1000);
@@ -128,7 +137,7 @@ const AuthCheck = () => {
 
       // Activity listeners
       const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
-      events.forEach(event => {
+      events.forEach((event) => {
         document.addEventListener(event, resetActivityTimer);
       });
 
@@ -139,7 +148,7 @@ const AuthCheck = () => {
       return () => {
         clearInterval(sessionCheckInterval);
         clearTimeout(activityTimeout);
-        events.forEach(event => {
+        events.forEach((event) => {
           document.removeEventListener(event, resetActivityTimer);
         });
       };
@@ -157,15 +166,15 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login', { 
+      navigate('/login', {
         replace: true,
-        state: { from: location }
+        state: { from: location },
       });
     }
   }, [isAuthenticated, navigate, location]);
 
   if (!isAuthenticated) return <LoadingScreen />;
-  
+
   return (
     <ErrorBoundary>
       <Layout>{children}</Layout>
@@ -187,7 +196,7 @@ const PublicRoute = ({ children }) => {
   }, [isAuthenticated, navigate, location]);
 
   if (isAuthenticated) return <LoadingScreen />;
-  
+
   return <ErrorBoundary>{children}</ErrorBoundary>;
 };
 
@@ -222,18 +231,31 @@ function App() {
           <AuthCheck />
           <Routes>
             {/* Landing Page */}
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
-                isAuthenticated ? 
-                  <Navigate to="/dashboard" replace /> : 
+                isAuthenticated ? (
+                  <Navigate to="/dashboard" replace />
+                ) : (
                   <Presentation />
-              } 
+                )
+              }
             />
 
             {/* Public Routes */}
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+
+            {/* New Public Pages */}
+            <Route path="/product" element={<PublicRoute><Product /></PublicRoute>} />
+            <Route path="/features" element={<PublicRoute><Features /></PublicRoute>} />
+            <Route path="/pricing" element={<PublicRoute><Pricing /></PublicRoute>} />
+            <Route path="/documentation" element={<PublicRoute><Documentation /></PublicRoute>} />
+            <Route path="/company" element={<PublicRoute><Company /></PublicRoute>} />
+            <Route path="/about" element={<PublicRoute><About /></PublicRoute>} />
+            <Route path="/blog" element={<PublicRoute><Blog /></PublicRoute>} />
+            <Route path="/support" element={<PublicRoute><Support /></PublicRoute>} />
+            <Route path="/privacy" element={<PublicRoute><Privacy /></PublicRoute>} />
 
             {/* Protected Routes */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
