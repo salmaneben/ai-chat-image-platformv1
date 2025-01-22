@@ -142,6 +142,10 @@ team
 Salmane ben yakhlaf
 EL MUSTAPHA LAKHLOUFI
 
+LIVE DEMO
+
+https://chatgptforfree.shop/
+
 Project Link: https://github.com/salmaneben/ai-chat-image-platformv1
 ```
 
